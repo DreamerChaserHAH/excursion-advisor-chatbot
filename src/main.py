@@ -598,29 +598,27 @@ async def get_data(request: Request):
             if context["name"].endswith("vaguelocation"):
                 country_name = context["parameters"].get("Country")
                 city_name = context["parameters"].get("City")
-                print(country_name)
-                print(city_name)
         
-        if country_name is not None:
-            print("Explaining about " + country_name)
-            return {
+            if country_name is not None:
+                print("Explaining about " + country_name)
+                return {
+                        "followupEventInput": {
+                        "name": "ExplainAbout",
+                        "parameters": {
+                            "Country": country_name
+                        }
+                    }
+                }
+            if city_name is not None:
+                print("Explaining about " + city_name)
+                return {
                     "followupEventInput": {
-                    "name": "ExplainAbout",
-                    "parameters": {
-                        "Country": country_name
+                        "name": "ExplainAbout",
+                        "parameters": {
+                            "City": city_name
+                        }
                     }
                 }
-            }
-        if city_name is not None:
-            print("Explaining about " + city_name)
-            return {
-                "followupEventInput": {
-                    "name": "ExplainAbout",
-                    "parameters": {
-                        "City": city_name
-                    }
-                }
-            }
         
     elif is_intent_the_same(intent_display_name,"random.recommendation"):
         to_country_name = None
