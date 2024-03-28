@@ -618,10 +618,16 @@ async def get_data(request: Request):
         for context in data["queryResult"]["outputContexts"]:
             if(context["name"].endswith("from-city-setting")):
                 coming_from = context["parameters"].get("coming-from")
-        if coming_from == "city-trip-plan":
-            return get_city_trip_plan_process(data)
-        if coming_from == "country-trip-plan":
-            return get_country_trip_plan_process(data)
+                if coming_from is not None:
+                    if coming_from == "city-trip-plan":
+                        return get_city_trip_plan_process(data)
+                    if coming_from == "country-trip-plan":
+                        return get_country_trip_plan_process(data)
+        return {
+            "followupEventInput": {
+                "name": "WantRecommendation"
+            }
+        }
     elif is_intent_the_same(intent_display_name,"budget.setting") or is_intent_the_same(intent_display_name, "city.to.settings") or is_intent_the_same(intent_display_name,"activities.setting") or is_intent_the_same(intent_display_name, "planning.city") or is_intent_the_same(intent_display_name, "planning.country.specificcity"):
         return get_city_trip_plan_process(data)
     elif is_intent_the_same(intent_display_name,"whatyouknow"):
