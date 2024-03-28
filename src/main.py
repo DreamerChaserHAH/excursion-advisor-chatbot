@@ -113,7 +113,7 @@ def get_fulfillment_message():
         "fulfillmentMessages": [
         ]
     }
-def get_country(country_name):
+def get_country(country_name, session_string):
     country_information = client.ExcursionData.Countries.find_one({"name": country_name.lower()})
     if country_information is None:
         return no_country_in_database_response()
@@ -131,12 +131,28 @@ def get_country(country_name):
     content['fulfillmentMessages'].append(add_image(country_name.capitalize() + "'s Flag", country_information["flag"]))
     for image in country_information["highlights"]:
         content["fulfillmentMessages"].append(add_image("Highlight", image))
+    content['fulfillmentMessages'].append({
+        "text": {
+            "text": [
+                "Do you want to travel to there?"
+            ]
+        }
+    })
+    content["outputContexts"] = []
+    content["outputContexts"] = [
+        {
+            "name": session_string + "/contexts/explain-about",
+            "lifespanCount": 2,
+            "parameters": {
+                "country": country_name
+            }
+        }
+    ]
     return content
-def get_city(city_name):
+def get_city(city_name, session_string):
     city_information = client.ExcursionData.Cities.find_one({"name": city_name.lower()})
     if city_information is None:
         return no_city_in_database_response()
-
     content =  {
         "fulfillmentMessages": [
             { 
@@ -150,6 +166,23 @@ def get_city(city_name):
     }
     for image in city_information["highlights"]:
         content["fulfillmentMessages"].append(add_image("Highlight", image))
+    content["fulfillmentMessages"].append({
+        "text": {
+            "text": [
+                "Do you want to travel to there?"
+            ]
+        }
+    })
+    content["outputContexts"] = []
+    content["outputContexts"] = [
+        {
+            "name": session_string + "/contexts/explain-about",
+            "lifespanCount": 2,
+            "parameters": {
+                "city": city_name
+            }
+        }
+    ]
     return content
 def random_country_recommendation(session_string):
     countries = list(client.ExcursionData.Countries.aggregate([{"$sample": {"size": 1}}]))
@@ -461,7 +494,7 @@ def get_city_trip_plan_process(data):
     from_city_name = None
     activity_type = None
     budget = None
-    to_city_name = data["queryResult"]["parameters"].get("to-city")
+    to_city_name = data["queryResult"]["parameters"].get("City")
 
     for context in data["queryResult"]["outputContexts"]:
         if(context["name"].endswith("from-city")):
@@ -557,6 +590,14 @@ async def get_data(request: Request):
                 "name": "RandomRecommendations"
             }
         }
+    elif is_intent_the_same(intent_display_name, "explain.about.yes"):
+        return{
+            "followupEventInput": {
+                "name": "PlanningTrip"
+            }
+        }
+    elif is_intent_the_same(intent_display_name, "planning.trip"):
+        get_country_trip_plan_process(data)
     elif is_intent_the_same(intent_display_name, "vague.city-livingthere"):
         for context in data["queryResult"]["outputContexts"]:
             if(context["name"].endswith("vague-city")):
