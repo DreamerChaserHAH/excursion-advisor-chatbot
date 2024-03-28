@@ -592,33 +592,31 @@ async def get_data(request: Request):
             }
         }
     elif is_intent_the_same(intent_display_name, "vague.location.yes"):  
-        country_name = None
-        city_name = None
         for context in data["queryResult"]["outputContexts"]:
             if context["name"].endswith("vaguelocation"):
                 country_name = context["parameters"].get("Country")
                 city_name = context["parameters"].get("City")
         
-            if country_name is not None:
-                print("Explaining about " + country_name)
-                return {
+                if country_name is not None:
+                    print("Explaining about " + country_name)
+                    return {
+                            "followupEventInput": {
+                            "name": "ExplainAbout",
+                            "parameters": {
+                                "Country": country_name
+                            }
+                        }
+                    }
+                if city_name is not None:
+                    print("Explaining about " + city_name)
+                    return {
                         "followupEventInput": {
-                        "name": "ExplainAbout",
-                        "parameters": {
-                            "Country": country_name
+                            "name": "ExplainAbout",
+                            "parameters": {
+                                "City": city_name
+                            }
                         }
                     }
-                }
-            if city_name is not None:
-                print("Explaining about " + city_name)
-                return {
-                    "followupEventInput": {
-                        "name": "ExplainAbout",
-                        "parameters": {
-                            "City": city_name
-                        }
-                    }
-                }
         
     elif is_intent_the_same(intent_display_name,"random.recommendation"):
         to_country_name = None
