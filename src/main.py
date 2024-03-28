@@ -547,7 +547,7 @@ async def get_data(request: Request):
     print(data)
     intent_display_name = data["queryResult"]["intent"]["displayName"]
 
-    if is_intent_the_same(intent_display_name, "want.recommendation.yes") or is_intent_the_same(intent_display_name, "city.from.settings.yes") or is_intent_the_same(intent_display_name, "vague.gothere.yes") or is_intent_the_same(intent_display_name, "country.from.yes") or is_intent_the_same(intent_display_name, "city.from.settings.yes") or is_intent_the_same(intent_display_name, "random.recommendation.no") or is_intent_the_same(intent_display_name, "city.from.default.yes") :
+    if is_intent_the_same(intent_display_name, "want.recommendation.yes") or is_intent_the_same(intent_display_name, "city.from.settings.yes") or is_intent_the_same(intent_display_name, "vague.gothere.yes") or is_intent_the_same(intent_display_name, "country.from.yes") or is_intent_the_same(intent_display_name, "city.from.settings.yes") or is_intent_the_same(intent_display_name, "random.recommendation.no") or is_intent_the_same(intent_display_name, "city.from.default.yes") or is_intent_the_same(is_intent_the_same, "random.recommendation.next") :
        return {
             "followupEventInput": {
                 "name": "RandomRecommendations"
