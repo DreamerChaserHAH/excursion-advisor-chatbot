@@ -267,26 +267,15 @@ def random_city_recommendation(country_name, session_string):
     for image in random_city["highlights"]:
         content["fulfillmentMessages"].append(add_image("Highlight", image))
     return content
-def get_country_trip_plan(from_city, to_country, session_string):
+def get_country_trip_plan(to_country, session_string):
     
     country_information = client.ExcursionData.Countries.find_one({"name": to_country.lower()})
     if country_information is None:
         return no_country_in_database_response()
-    
-    if from_city is None:
-        return from_city_empty_response(session_string, "country-trip-plan")
-    
+
     cities_list = client.ExcursionData.Cities.find({"country": ObjectId(country_information["_id"])})
     return {
         "fulfillmentMessages": [
-            {
-                "text": {
-                    "text": [
-                        "I see that you are departing from " + from_city + ".",
-                        "Alright! You are coming from " + from_city + "."
-                    ]
-                }
-            },
             {
                 "text": {
                     "text": [
@@ -294,19 +283,8 @@ def get_country_trip_plan(from_city, to_country, session_string):
                     ]
                 }
             },
-            {
-                "text": {
-                    "text": [
-                        "Or, tell me if you want some random recommendations from "+ to_country + "?"
-                    ]
-                }
-            }
         ],
         "outputContexts": [
-                {
-                    "name": session_string + "/contexts/to-city-setting",
-                    "lifespanCount": 1,
-                },
                 {
                     "name": session_string + "/contexts/to-country",
                     "lifespanCount": 9999,
@@ -500,15 +478,8 @@ def get_city_trip_plan_process(data):
 
     return get_city_trip_plan(from_city_name, to_city_name, activity_type, budget, data["session"])
 def get_country_trip_plan_process(data):
-    from_city_name = None
     to_country_name = data["queryResult"]["parameters"].get("to-country")
-
-    for context in data["queryResult"]["outputContexts"]:
-        if(context["name"].endswith("from-city")):
-            from_city_name = context["parameters"].get("from-city")
-        if(context["name"].endswith("to-country")) and to_country_name is None:
-            to_country_name = context["parameters"].get("to-country")
-    return get_country_trip_plan(from_city_name, to_country_name, data["session"])    
+    return get_country_trip_plan(to_country_name, data["session"])    
 
 client = MongoClient(uri, server_api=ServerApi('1'))
 
@@ -583,13 +554,41 @@ async def get_data(request: Request):
             }
         }
     elif is_intent_the_same(intent_display_name, "explain.about.yes"):
+        for context in data["queryResult"]["outputContexts"]:
+            if context["name"].endswith("explain-about"):
+                country_name = context["parameters"].get("country")
+                if country_name is not None:
+                    return{
+                            "followupEventInput": {
+                                "name": "PlanningTripCountry",
+                                "parameters": {
+                                "to-country": country_name
+                            }
+                        }
+                    }
+                city_name = context["parameters"].get("city")
+                if city_name is not None:
+                    return{
+                            "followupEventInput": {
+                                "name": "PlanningTrip",
+                                "parameters": {
+                                "City": city_name
+                            }
+                        }
+                    }
+    elif is_intent_the_same(intent_display_name, "planning.trip.country"):
+        return get_country_trip_plan_process(data)
+    elif is_intent_the_same(intent_display_name, "planning.trip.city"):
+        return get_city_trip_plan_process(data)
+    elif is_intent_the_same(intent_display_name, "planning.trip.country.specific-city"):
         return{
             "followupEventInput": {
-                "name": "PlanningTrip"
+                "name": "PlanningTrip",
+                "parameters": {
+                    "City": data["queryResult"]["parameters"]["City"]
+                }
             }
         }
-    elif is_intent_the_same(intent_display_name, "planning.trip"):
-        return get_city_trip_plan_process(data)
     elif is_intent_the_same(intent_display_name, "vague.city-livingthere"):
         for context in data["queryResult"]["outputContexts"]:
             if(context["name"].endswith("vague-city")):
