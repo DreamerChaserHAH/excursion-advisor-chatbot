@@ -592,7 +592,7 @@ async def get_data(request: Request):
             }
         }
     elif is_intent_the_same(intent_display_name, "vague.location.yes"):  
-        country_name = data["queryResult"]["parameters"].get["Country"]
+        country_name = data["queryResult"]["parameters"].get("Country")
         if country_name is not None:
             return {
                     "followupEventInput": {
@@ -602,7 +602,7 @@ async def get_data(request: Request):
                     }
                 }
             }
-        city_name = data["queryResult"]["parameters"].get["City"]
+        city_name = data["queryResult"]["parameters"].get("City")
         if city_name is not None:
             return {
                 "followupEventInput": {
