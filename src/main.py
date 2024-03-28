@@ -598,8 +598,9 @@ async def get_data(request: Request):
             if context["name"].endswith("zvaguelocation-followup"):
                 country_name = context["parameters"].get("Country")
                 city_name = context["parameters"].get("City")
-                
+        
         if country_name is not None:
+            print("Explaining about " + country_name)
             return {
                     "followupEventInput": {
                     "name": "ExplainAbout",
@@ -609,6 +610,7 @@ async def get_data(request: Request):
                 }
             }
         if city_name is not None:
+            print("Explaining about " + city_name)
             return {
                 "followupEventInput": {
                     "name": "ExplainAbout",
