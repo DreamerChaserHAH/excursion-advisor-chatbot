@@ -365,7 +365,6 @@ def get_city_trip_plan(from_city, to_city, activity_type, budget, session_string
             ]
         }
 
-    
     return {
         "fulfillmentMessages": [
             {
@@ -676,7 +675,7 @@ async def get_data(request: Request):
             if(context["name"].endswith("vague-city")):
                 city_name = context["parameters"]["city"]
                 return get_city(city_name)           
-    elif is_intent_the_same(intent_display_name,"city.from.settings"):
+    elif is_intent_the_same(intent_display_name,"city.from.settings") or is_intent_the_same(intent_display_name,"budget.setting") or is_intent_the_same(intent_display_name,"activities.setting"):
         for context in data["queryResult"]["outputContexts"]:
             if(context["name"].endswith("to-city")):
                 to_city = context["parameters"].get("to-city")
@@ -694,7 +693,7 @@ async def get_data(request: Request):
                 "name": "WantRecommendation"
             }
         }
-    elif is_intent_the_same(intent_display_name,"budget.setting") or is_intent_the_same(intent_display_name, "city.to.settings") or is_intent_the_same(intent_display_name,"activities.setting") or is_intent_the_same(intent_display_name, "planning.city") or is_intent_the_same(intent_display_name, "planning.country.specificcity"):
+    elif is_intent_the_same(intent_display_name, "city.to.settings") or is_intent_the_same(intent_display_name, "planning.city") or is_intent_the_same(intent_display_name, "planning.country.specificcity"):
         return get_city_trip_plan_process(data)
     elif is_intent_the_same(intent_display_name,"whatyouknow"):
         return whatiknow()
