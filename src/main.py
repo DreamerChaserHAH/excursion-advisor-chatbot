@@ -377,7 +377,7 @@ def get_city_trip_plan(from_city, to_city, activity_type, budget, session_string
             }
         ],
         "followupEventInput": {
-            "name": "BudgetEvents",
+            "name": "BudgetRangeEvent",
             "parameters": {
                 "City": to_city,
                 "Budget": budget
@@ -391,13 +391,6 @@ def get_city_trip_plan(from_city, to_city, activity_type, budget, session_string
                         "to-city": to_city
                     }
                 },
-                {
-                    "name": session_string + "/contexts/budget",
-                    "lifespanCount": 9999,
-                    "parameters": {
-                        "budget": budget
-                    }
-                }
             ]
     }
 def get_country_budget_information():
@@ -615,9 +608,7 @@ async def get_data(request: Request):
                         }
                     }
                 )
-                return get_city_trip_plan_process(data) 
-    elif is_intent_the_same(intent_display_name, "planning.country"):
-        return get_city_trip_plan_process(data)    
+                return get_city_trip_plan_process(data)   
     elif is_intent_the_same(intent_display_name,"random.recommendation"):
         to_country_name = None
         for context in data["queryResult"]["outputContexts"]:
@@ -693,8 +684,6 @@ async def get_data(request: Request):
                 "name": "WantRecommendation"
             }
         }
-    elif is_intent_the_same(intent_display_name, "city.to.settings") or is_intent_the_same(intent_display_name, "planning.city") or is_intent_the_same(intent_display_name, "planning.country.specificcity"):
-        return get_city_trip_plan_process(data)
     elif is_intent_the_same(intent_display_name,"whatyouknow"):
         return whatiknow()
     elif is_intent_the_same(intent_display_name, "travel.safety"):
