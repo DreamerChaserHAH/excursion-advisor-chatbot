@@ -554,6 +554,7 @@ async def get_data(request: Request):
             }
         }
     elif is_intent_the_same(intent_display_name, "explain.about.yes"):
+        print("Explain ABOUT YES")
         for context in data["queryResult"]["outputContexts"]:
             if context["name"].endswith("explain-about"):
                 country_name = context["parameters"].get("country")
