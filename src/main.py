@@ -617,7 +617,31 @@ async def get_data(request: Request):
                             }
                         }
                     }
-        
+    elif is_intent_the_same(intent_display_name, "vague.location.gothere"):
+        for context in data["queryResult"]["outputContexts"]:
+            if context["name"].endswith("vaguelocation"):
+                country_name = context["parameters"].get("Country")
+                city_name = context["parameters"].get("City")
+
+                if country_name is not None and country_name is not "":
+                    return {
+                            "followupEventInput": {
+                            "name": "PlanningTripCountry",
+                            "parameters": {
+                                "to-country": country_name
+                            }
+                        }
+                    }
+                if city_name is not None and city_name is not "":
+                    print("Explaining about " + city_name)
+                    return {
+                        "followupEventInput": {
+                            "name": "PlanningTrip",
+                            "parameters": {
+                                "City": city_name
+                            }
+                        }
+                    }
     elif is_intent_the_same(intent_display_name,"random.recommendation"):
         to_country_name = None
         for context in data["queryResult"]["outputContexts"]:
