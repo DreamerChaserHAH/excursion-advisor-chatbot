@@ -48,7 +48,7 @@ def whatiknow():
             {
                 "text": {
                     "text": [
-                        "However, here is a list of countries 𝗪𝗮𝗻𝗱𝗲𝗿 know at this particular moment:\n" + ",\n ".join([country["name"].capitalize() for country in countries]) + ".",
+                        "Here is a list of countries 𝗪𝗮𝗻𝗱𝗲𝗿 know at this particular moment:\n" + ",\n ".join([country["name"].capitalize() for country in countries]) + ".",
                     ]
                 }
             }
