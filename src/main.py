@@ -597,7 +597,6 @@ async def get_data(request: Request):
         for context in data["queryResult"]["outputContexts"]:
             if context["name"].endswith("zvaguelocation-followup"):
                 country_name = context["parameters"].get("Country")
-            if context["name"].endswith("to-city"):
                 city_name = context["parameters"].get("City")
                 
         if country_name is not None:
