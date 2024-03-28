@@ -633,12 +633,12 @@ async def get_data(request: Request):
                     }
                 }
             if context["name"].endswith("random-city-recommendation"):
-                country_name = context["parameters"].get("city")
+                city_name = context["parameters"].get("city")
                 return {
                     "followupEventInput": {
                         "name": "ExplainAbout",
                         "parameters": {
-                            "Country": country_name
+                            "City": city_name
                         }
                     }
                 }
