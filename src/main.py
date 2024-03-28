@@ -598,6 +598,8 @@ async def get_data(request: Request):
             if context["name"].endswith("vaguelocation"):
                 country_name = context["parameters"].get("Country")
                 city_name = context["parameters"].get("City")
+                print(country_name)
+                print(city_name)
         
         if country_name is not None:
             print("Explaining about " + country_name)
