@@ -592,6 +592,14 @@ async def get_data(request: Request):
             }
         }
     elif is_intent_the_same(intent_display_name, "vague.location.yes"):  
+        country_name = None
+        city_name = None
+        for context in data["queryResult"]["outputContexts"]:
+            if context["name"].endswith("zvaguelocation-followup"):
+                country_name = context["parameters"].get("Country")
+            if context["name"].endswith("to-city"):
+                city_name = context["parameters"].get("City")
+                
         country_name = data["queryResult"]["parameters"].get("Country")
         if country_name is not None:
             return {
