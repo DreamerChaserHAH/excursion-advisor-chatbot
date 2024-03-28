@@ -289,6 +289,7 @@ def get_city_trip_plan(from_city, to_city, activity_type, budget, session_string
         return no_city_in_database_response()   
     if from_city is None:
         content = from_city_empty_response(session_string, "city-trip-plan")
+        content["outputContexts"] = [];
         content["outputContexts"].append(
             {
                 "name": session_string + "/contexts/to-city",
