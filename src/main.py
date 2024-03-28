@@ -176,7 +176,7 @@ def random_country_recommendation(session_string):
         "outputContexts": [
             {
                 "name": session_string + "/contexts/random-country-recommendation",
-                "lifespanCount": 1,
+                "lifespanCount": 2,
                 "parameters": {
                     "country": random_country["name"]
                 }
@@ -224,7 +224,7 @@ def random_city_recommendation(country_name, session_string):
         "outputContexts": [
             {
                 "name": session_string + "/contexts/random-city-recommendation",
-                "lifespanCount": 1,
+                "lifespanCount": 2,
                 "parameters": {
                     "city": random_city["name"]
                 }
