@@ -648,7 +648,7 @@ async def get_data(request: Request):
                     country_name = context["parameters"].get("country")
 
         if country_name:
-            return get_country(country_name)
+            return get_country(country_name, data["session"])
         city_name = data["queryResult"]["parameters"].get("City")
         for context in data["queryResult"]["outputContexts"]:
             if context["name"].endswith("random-city-recommendation"):
@@ -659,7 +659,7 @@ async def get_data(request: Request):
         for context in data["queryResult"]["outputContexts"]:
             if(context["name"].endswith("vague-country")):
                 country_name = context["parameters"]["country"]
-                return get_country(country_name)
+                return get_country(country_name, data["session"])
     elif is_intent_the_same(intent_display_name,"vague.city.yes"):
         for context in data["queryResult"]["outputContexts"]:
             if(context["name"].endswith("vague-city")):
