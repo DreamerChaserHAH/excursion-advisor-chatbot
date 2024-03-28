@@ -588,7 +588,29 @@ async def get_data(request: Request):
         if to_country_name is not None:
             return random_city_recommendation(to_country_name, data["session"])
         else:
-            return random_country_recommendation(data["session"])   
+            return random_country_recommendation(data["session"])  
+    elif is_intent_the_same(intent_display_name,"random.recommendation.yes"):
+        for context in data["queryResult"]["outputContexts"]:
+            if context["name"].endswith("random-country-recommendation"):
+                country_name = context["parameters"].get("country")
+                return {
+                    "followupEventInput": {
+                        "name": "ExplainAbout",
+                        "parameters": {
+                            "Country": country_name
+                        }
+                    }
+                }
+            if context["name"].endswith("random-city-recommendation"):
+                country_name = context["parameters"].get("city")
+                return {
+                    "followupEventInput": {
+                        "name": "ExplainAbout",
+                        "parameters": {
+                            "Country": country_name
+                        }
+                    }
+                }
     elif is_intent_the_same(intent_display_name,"explain.about") or is_intent_the_same(intent_display_name, "random.recommendation.yes") :
         country_name = data["queryResult"]["parameters"].get("Country")
         if country_name is None:
