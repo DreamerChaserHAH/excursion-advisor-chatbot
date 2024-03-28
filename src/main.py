@@ -618,7 +618,6 @@ async def get_data(request: Request):
                 )
                 return get_city_trip_plan_process(data) 
     elif is_intent_the_same(intent_display_name, "planning.country"):
-        return get_country_trip_plan_process(data)
         return get_city_trip_plan_process(data)    
     elif is_intent_the_same(intent_display_name,"random.recommendation"):
         to_country_name = None
@@ -679,13 +678,10 @@ async def get_data(request: Request):
                 return get_city(city_name)           
     elif is_intent_the_same(intent_display_name,"city.from.settings"):
         for context in data["queryResult"]["outputContexts"]:
-            if(context["name"].endswith("from-city-setting")):
-                coming_from = context["parameters"].get("coming-from")
-                if coming_from is not None:
-                    if coming_from == "city-trip-plan":
-                        return get_city_trip_plan_process(data)
-                    if coming_from == "country-trip-plan":
-                        return get_country_trip_plan_process(data)
+            if(context["name"].endswith("to-city")):
+                to_city = context["parameters"].get("to-city")
+                if to_city is not None:
+                    get_city_trip_plan_process(data)
         return {
             "followupEventInput": {
                 "name": "WantRecommendation"
