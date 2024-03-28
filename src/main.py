@@ -600,7 +600,6 @@ async def get_data(request: Request):
             if context["name"].endswith("to-city"):
                 city_name = context["parameters"].get("City")
                 
-        country_name = data["queryResult"]["parameters"].get("Country")
         if country_name is not None:
             return {
                     "followupEventInput": {
@@ -610,7 +609,6 @@ async def get_data(request: Request):
                     }
                 }
             }
-        city_name = data["queryResult"]["parameters"].get("City")
         if city_name is not None:
             return {
                 "followupEventInput": {
