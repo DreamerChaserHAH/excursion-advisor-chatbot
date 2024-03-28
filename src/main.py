@@ -597,7 +597,7 @@ async def get_data(request: Request):
             }
         }
     elif is_intent_the_same(intent_display_name, "planning.trip"):
-        get_country_trip_plan_process(data)
+        return get_city_trip_plan_process(data)
     elif is_intent_the_same(intent_display_name, "vague.city-livingthere"):
         for context in data["queryResult"]["outputContexts"]:
             if(context["name"].endswith("vague-city")):
