@@ -656,7 +656,7 @@ async def get_data(request: Request):
             if context["name"].endswith("random-city-recommendation"):
                 city_name = context["parameters"].get("city")
         if city_name:
-            return get_city(city_name)
+            return get_city(city_name, data["session"])
     elif is_intent_the_same(intent_display_name,"vague.country.yes"):
         for context in data["queryResult"]["outputContexts"]:
             if(context["name"].endswith("vague-country")):
@@ -666,7 +666,7 @@ async def get_data(request: Request):
         for context in data["queryResult"]["outputContexts"]:
             if(context["name"].endswith("vague-city")):
                 city_name = context["parameters"]["city"]
-                return get_city(city_name)           
+                return get_city(city_name, data["session"])           
     elif is_intent_the_same(intent_display_name,"city.from.settings") or is_intent_the_same(intent_display_name,"budget.setting") or is_intent_the_same(intent_display_name,"activities.setting"):
         for context in data["queryResult"]["outputContexts"]:
             if(context["name"].endswith("to-city")):
