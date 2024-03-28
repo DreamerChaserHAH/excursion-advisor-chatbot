@@ -591,25 +591,28 @@ async def get_data(request: Request):
                 }
             }
         }
-    elif is_intent_the_same(intent_display_name, "vague.city-livingthere"):
-        for context in data["queryResult"]["outputContexts"]:
-            if(context["name"].endswith("vague-city")):
-                city_name = context["parameters"]["city"]
-                return from_city_as_context(city_name, data["session"])    
-    elif is_intent_the_same(intent_display_name, "vague.city.go.there"):
-        for context in data["queryResult"]["outputContexts"]:
-            if(context["name"].endswith("vague-city")):
-                city_name = context["parameters"]["city"]  
-                data["queryResult"]["outputContexts"].append(
-                    {
-                        "name": data["session"] + "/contexts/to-city",
-                        "lifespanCount": 1,
-                        "parameters": {
-                    "to-city": city_name
-                        }
+    elif is_intent_the_same(intent_display_name, "vague.location.yes"):  
+        country_name = data["queryResult"]["parameters"].get["Country"]
+        if country_name is not None:
+            return {
+                    "followupEventInput": {
+                    "name": "ExplainAbout",
+                    "parameters": {
+                        "Country": country_name
                     }
-                )
-                return get_city_trip_plan_process(data)   
+                }
+            }
+        city_name = data["queryResult"]["parameters"].get["City"]
+        if city_name is not None:
+            return {
+                "followupEventInput": {
+                    "name": "ExplainAbout",
+                    "parameters": {
+                        "City": city_name
+                    }
+                }
+            }
+        
     elif is_intent_the_same(intent_display_name,"random.recommendation"):
         to_country_name = None
         for context in data["queryResult"]["outputContexts"]:
@@ -642,7 +645,7 @@ async def get_data(request: Request):
                         }
                     }
                 }
-    elif is_intent_the_same(intent_display_name,"explain.about") or is_intent_the_same(intent_display_name, "random.recommendation.yes") :
+    elif is_intent_the_same(intent_display_name,"explain.about"):
         country_name = data["queryResult"]["parameters"].get("Country")
         if country_name is None:
             for context in data["queryResult"]["outputContexts"]:
@@ -656,17 +659,7 @@ async def get_data(request: Request):
             if context["name"].endswith("random-city-recommendation"):
                 city_name = context["parameters"].get("city")
         if city_name:
-            return get_city(city_name, data["session"])
-    elif is_intent_the_same(intent_display_name,"vague.country.yes"):
-        for context in data["queryResult"]["outputContexts"]:
-            if(context["name"].endswith("vague-country")):
-                country_name = context["parameters"]["country"]
-                return get_country(country_name, data["session"])
-    elif is_intent_the_same(intent_display_name,"vague.city.yes"):
-        for context in data["queryResult"]["outputContexts"]:
-            if(context["name"].endswith("vague-city")):
-                city_name = context["parameters"]["city"]
-                return get_city(city_name, data["session"])           
+            return get_city(city_name, data["session"])         
     elif is_intent_the_same(intent_display_name,"city.from.settings") or is_intent_the_same(intent_display_name,"budget.setting") or is_intent_the_same(intent_display_name,"activities.setting"):
         for context in data["queryResult"]["outputContexts"]:
             if(context["name"].endswith("to-city")):
