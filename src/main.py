@@ -557,6 +557,7 @@ async def get_data(request: Request):
         for context in data["queryResult"]["outputContexts"]:
             if context["name"].endswith("explain-about"):
                 country_name = context["parameters"].get("country")
+                print("explain about debug " + country_name)
                 if country_name is not None:
                     return{
                             "followupEventInput": {
