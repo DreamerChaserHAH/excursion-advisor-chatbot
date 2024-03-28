@@ -653,7 +653,7 @@ async def get_data(request: Request):
                             "followupEventInput": {
                             "name": "FromCitySettings",
                             "parameters": {
-                                "to-country": country_name
+                                "geo-country": country_name
                             }
                         }
                     }
@@ -663,7 +663,7 @@ async def get_data(request: Request):
                         "followupEventInput": {
                             "name": "FromCitySettings",
                             "parameters": {
-                                "City": city_name
+                                "from-city": city_name
                             }
                         }
                     }
