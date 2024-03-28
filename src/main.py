@@ -681,7 +681,14 @@ async def get_data(request: Request):
             if(context["name"].endswith("to-city")):
                 to_city = context["parameters"].get("to-city")
                 if to_city is not None:
-                    get_city_trip_plan_process(data)
+                    return {
+                        "followupEventInput": {
+                            "name": "PlanningTrip",
+                            "parameters": {
+                                "City": to_city
+                            }
+                        }
+                    }
         return {
             "followupEventInput": {
                 "name": "WantRecommendation"
